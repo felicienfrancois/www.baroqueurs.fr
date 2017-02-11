@@ -1,36 +1,23 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <title>Les Baroqueurs du XVIIIeme - Contact</title>
-<link rel="stylesheet" href="styles.css" type="text/css">
-<link rel="icon" href="favicon.html" type="image/x-icon"/><style type="text/css">
-@import "include/style.css";
-* {font-family:Verdana,Arial;font-size:10px;color:#000;}
-.Style8 {color: #000000}
-.Style14 {
-	font-family: "Book Antiqua";
-	font-size: 16px;
-	line-height: normal;
-}
-.Style24 {
-	font-size: 12px;
-	font-weight: bold;
-	font-style: italic;
-}
-.Style26 {font-size: larger; font-weight: bold; font-style: italic; }
-</style>
+<link rel="stylesheet" href="css/styles.css" type="text/css">
+<link rel="icon" href="favicon.html" type="image/x-icon"/>
 <META NAME="keywords" CONTENT="Baroqueurs,flutes,groupe,flutistes,paris,18,quintuor,sextuor,quatuor,bec,vent,instruments,conservatoire,musical,musique,baroque,bach,vivaldi,mozart,corelli">
 <meta http-equiv="Pragma" content="no-cache" />
 <meta content="no-cache" http-equiv="no-cache" />
 <meta http-equiv="Cache-Control" content="no-cache" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 <body id="home">
 <div align="center" id="mainContainer">
-  <div style="border:1px solid white;"><a href="index.html" title="Home Page"><img src="logo.gif" width="288" height="127"  border="0"></a></div>  
+  <div style="border:1px solid white;"><a href="index.html" title="Home Page"><img src="images/logo.gif" width="288" height="127"  border="0"></a></div>  
   <div>
     <table width="805" align="center">
       <tr>
-        <th width="795" scope="row"><img src="barre1.gif" alt="" width="732" height="10"></th>
+        <th width="795" scope="row"><img src="images/barre1.gif" alt="" width="732" height="10"></th>
       </tr>
       <tr>
         <th scope="row"><table width="92%" align="center">
@@ -58,7 +45,7 @@
         <th scope="row">&nbsp;</th>
       </tr>
       <tr>
-        <th scope="row"><img src="barre2contact.gif" alt="" width="732" height="50"></th>
+        <th scope="row"><img src="images/barre2contact.gif" alt="" width="732" height="50"></th>
       </tr>
       <tr>
         <th scope="row">&nbsp;</th>
@@ -73,10 +60,10 @@
         <blockquote>
           <blockquote>
             <blockquote>
-              <p class="Style14">Si vous souhaitez recevoir des informations sur l'Ensemble, nous contacter pour une repr&eacute;sentation, ou nous faire part de vos remarques, remplissez les champs ci dessous.<br>
+              <p class="Style14">Si vous souhaitez recevoir des informations sur l'Ensemble, nous contacter pour une représentation, ou nous faire part de vos remarques, remplissez les champs ci dessous.<br>
                   <br>
               </p>
-			  <form id="contactForm" Action="rens.php" method="POST">
+			  <form id="contactForm" method="POST">
               <table cellspacing="0" cellpadding="0" border="0">
                 <tbody>
                   <tr>
@@ -84,16 +71,16 @@
                     <td width="309" height="25" align="left"><input type="Text" name="nom" id="nom" size="46" maxlength="46"></td>
                   </tr>
                   <tr>
-                    <td align="left" height="25"><p>Pr&eacute;nom</p></td>
+                    <td align="left" height="25"><p>Prénom</p></td>
                     <td align="left" height="25"><input type="Text" name="prenom" id="prenom" size="46" maxlength="46"></td>
                   </tr>
                   <tr>
-                    <td align="left" height="25"><p>E-mail <font color="#FF0000"><b> *</b></font></p></td>
+                    <td align="left" height="25"><p>E-mail&nbsp;<font color="#FF0000"><b> *</b></font></p></td>
                     <td align="left" height="25"><input type="Text" name="email" id="email" size="46" maxlength="46"></td>
                   </tr>
                   <tr>
                     <td align="left" height="25" colspan="2"><p>
-                        <p>Votre message (max. 255 caract&egrave;res):<br>
+                        <p>Votre message :<br>
                             <textarea name="texte" id="texte" cols="46" rows="10"></textarea>
                         <p>
                           <input name="submit2" type="submit" value="Envoyer">
@@ -102,21 +89,42 @@
                 </tbody>
               </table>
 			  </form>
+			  <script type="text/javascript">
+			      $("#contactForm").submit(function(event) {
+			          event.preventDefault();
+			          $.ajax({
+                          url: "https://formspree.io/contact@baroqueurs.fr",
+                          method: "POST",
+                          data: {
+                              _subject: "Nouveau message de "+$("#prenom").val() + " " + $("#nom").val(),
+                              Nom: $("#prenom").val() + " " + $("#nom").val(),
+                              email: $("#email").val(),
+                              message: $("#texte").val()
+                          },
+                          dataType: "json",
+                          success: function() {
+                              $("#contactForm")[0].reset();
+                              alert("Votre message a bien été transmis");
+                          }
+                      }); 
+			          return false;
+			      });
+			  </script>
             </blockquote>
           </blockquote>
         </blockquote>
       </blockquote>
         <p class="Style14"><br>
         </p></td>
-      <td width="19" align="center" valign="top"><img src="barrev.gif" width="10" height="404"></td>
-      <td width="160" align="left" valign="middle"><p class="Style14">Vous pouvez contacter l'Ensemble &quot;Les Baroqueurs du XVIIIeme&quot; par email  : <span class="Style26"><a href="mailto:baroqueurs@yahoo.fr">baroqueurs@yahoo.fr</a></span></p>
+      <td width="19" align="center" valign="top"><img src="images/barrev.gif" width="10" height="404"></td>
+      <td width="160" align="left" valign="middle"><p class="Style14">Vous pouvez contacter l'Ensemble &quot;Les Baroqueurs du XVIIIeme&quot; par email  : <span class="Style26"><a href="mailto:contact@baroqueurs.fr">contact@baroqueurs.fr</a></span></p>
         <p class="Style14">&nbsp;</p>
         <p class="Style14">Pour contacter le Webmaster, envoyez un email &agrave; : <span class="Style24"><a href="mailto:contact@xninetworks.com">contact@xninetworks.com</a></span></p>      </td>
     </tr>
   </table>
   <p>&nbsp;</p>
   <div id="footer">
-    <div align="center">&copy; 2009-2016 Barroco Piccolo - Cr&eacute;ation du Site par <a href="http://www.xni-networks.fr" target="_blank">X.N.I Networks</a> - Tous droits r&eacute;serv&eacute;s</div>
+    <div align="center">&copy; 2009-2017 Barroco Piccolo - Création du Site par <a href="http://www.xni-networks.fr" target="_blank">X.N.I Networks</a> - Tous droits réservés</div>
   </div>
 </div>
 </body>
