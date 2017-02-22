@@ -16,3 +16,4 @@ Thumbs.db
 /bower_components/
 /npm-debug.log
 .project
+/media/*
