@@ -795,6 +795,13 @@ OL {
 	font-style: italic;
 }
 
+.Style17 {
+	font-family: "Book Antiqua";
+	font-size: 16px;
+	line-height: normal;
+	font-weight: bold;
+}
+
 .Style18 {
 	font-size: smaller;
 	font-weight: bold;
