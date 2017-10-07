@@ -27,26 +27,25 @@ A:hover {
 	color: #666699
 }
 
-A.navLink:link {
-	text-decoration: none;
-	color: #000000
-}
-
+A.navLink:link,
 A.navLink:visited {
 	text-decoration: none;
-	color: #000000
+	color: #000000;
+	font-size: 1.2em;
+    padding: 5px 10px;
 }
 
-A.navLink:active {
-	text-decoration: none;
-	color: #AD1818
-}
-
+A.navLink:active,
 A.navLink:hover {
 	text-decoration: none;
 	color: #AD1818
 }
 
+A.currentLink:link,
+A.currentLink:visited {
+    background: #692626;
+    color: white;
+}
 A.footer:link {
 	text-decoration: none;
 	color: #9498Af
