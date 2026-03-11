@@ -1,0 +1,173 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allConcerts = await getCollection('concerts');
+const upcomingConcerts = allConcerts.filter((c) => c.data.date >= new Date()).sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
+const pastConcerts = allConcerts.filter((c) => c.data.date < new Date()).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const allMorceaux = await getCollection('morceaux');
+const piecesByCategory = allMorceaux.reduce(
+  (acc, piece) => {
+    const cat = piece.data.category;
+    if (!acc[cat]) acc[cat] = [];
+    acc[cat].push(piece);
+    return acc;
+  },
+  {} as Record<string, typeof allMorceaux>,
+);
+
+const allLieux = await getCollection('lieux');
+
+const formatDate = (date: Date) => {
+  return date
+    .toLocaleDateString('fr-FR', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone: 'Europe/Paris',
+    })
+    .replace(':', 'h');
+};
+
+const formatDateShort = (date: Date) => {
+  return date.toLocaleDateString('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'Europe/Paris',
+  });
+};
+
+// Prefetch content
+const upcomingConcertsContent = await Promise.all(
+  upcomingConcerts.map(async (c) => {
+    const { Content } = await c.render();
+    return { ...c, Content };
+  }),
+);
+
+const pastConcertsContent = await Promise.all(
+  pastConcerts.map(async (c) => {
+    const { Content } = await c.render();
+    return { ...c, Content };
+  }),
+);
+---
+
+<BaseLayout title="Calendrier des concerts" current="calendrier">
+  <img slot="hero" src="/images/DSC07981_calendrier.jpg" width="900" />
+
+  <table width="757" height="332" border="0" cellpadding="0" cellspacing="0" id="highLight">
+    <tr><td class="celSpacer"></td></tr>
+    <tr>
+      <td width="598" valign="top" bgcolor="#FFFFFF" id="news">
+        <p align="center" class="Style16">Programme musical 2026</p>
+        <blockquote>
+          <blockquote>
+            <blockquote>
+              <p class="Style14">
+                <span class="Style15">J.-Chrétien Bach</span> : Quintett IV<br />
+                <span class="Style15">Telemann</span> : Concerto en mi mineur<br />
+                <span class="Style15">C.P.E. Bach</span> : Trio Sonata<br />
+                <span class="Style15">Jan Rokyta</span> : Balkanology<br />
+                <span class="Style15">J.-Sébastien Bach</span> : Double Concerto<br />
+                <span class="Style15">J.-Sébastien Bach</span> : Passacaille<br />
+                <span class="Style15">Musique traditionnelle Klezmer</span> : Freylekh & Khosidl<br />
+                <span class="Style15">Mozart</span> : Symphonie n°41 "Jupiter"<br />
+              </p>
+            </blockquote>
+          </blockquote>
+          <p class="Style14">
+            <br />
+            <span class="Style14"><span class="Style16">Prochains concerts</span> :</span>
+          </p>
+          <ul class="Style20">
+            {
+              upcomingConcertsContent.map((concert) => (
+                <li class="Style19">
+                  <>
+                    <span class="Style25">
+                      {formatDate(concert.data.date)} : <span class="Style14">{concert.data.lieu}</span>
+                    </span>
+                    <br />
+                  </>
+                  <span style="font-size:12px; line-height:25px">
+                    <concert.Content />
+                  </span>
+                </li>
+              ))
+            }
+          </ul><br />
+
+          <p>
+            <span class="Style14"><span class="Style16">Concerts précédents</span> :</span>
+          </p>
+          <ul class="Style20">
+            {
+              pastConcertsContent.map((concert) => (
+                <li class="Style19">
+                  <>
+                    <span class="Style25">
+                      {formatDateShort(concert.data.date)} : <span class="Style14">{concert.data.lieu}</span>
+                    </span>
+                    <br />
+                  </>
+                  <span style="font-size:12px; line-height:25px">
+                    <concert.Content />
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+
+          <p class="Style14">
+            <br />
+            <span class="Style16">Retrouvez quelques morceaux du répertoire des Baroqueurs</span> :
+          </p>
+
+          {
+            Object.entries(piecesByCategory).map(([cat, pieces]) => (
+              <>
+                <p class="Style19">
+                  <span class="Style25">Autour de la musique {cat} : </span>
+                </p>
+                <ul class="Style20">
+                  {pieces.map((piece) => (
+                    <li class="Style19">
+                      <span class="Style25">
+                        <span class="Style14">{piece.data.composer} : </span>
+                      </span>
+                      <span style="font-size:12px; line-height:20px">
+                        {piece.data.title} {piece.data.work ? ` - ${piece.data.work}` : ''}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ))
+          }
+
+          <p class="Style14">
+            <br />
+            <span class="Style16">Retrouvez quelques lieux de concert des Baroqueurs</span> :
+          </p>
+          <ul class="Style20">
+            {
+              allLieux.map((lieu) => (
+                <li class="Style19">
+                  <span class="Style14">
+                    {lieu.data.nom}, {lieu.data.ville} {lieu.data.cp ? lieu.data.cp : ''}{' '}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </blockquote>
+      </td>
+    </tr>
+  </table>
+</BaseLayout>

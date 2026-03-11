@@ -1,0 +1,27 @@
+---
+const { current } = Astro.props;
+const links = [
+  { label: 'Accueil', href: '/', key: 'home', width: '8%' },
+  { label: "L'Ensemble", href: '/ensemble', key: 'ensemble', width: '12%' },
+  { label: 'Calendrier des concerts', href: '/calendrier', key: 'calendrier', width: '15%' },
+  { label: 'Extraits audios et vidéos', href: '/extraits', key: 'extraits', width: '14%' },
+  { label: 'Galerie de photos', href: '/photos', key: 'photos', width: '14%' },
+  { label: 'Contact', href: '/contact', key: 'contact', width: '10%' },
+];
+---
+
+<table width="92%" align="center">
+  <tr>
+    {
+      links.map((link) => (
+        <td width={link.width} height="24" nowrap align="center" class="Style8">
+          <font size="2">
+            <a class={`navLink ${current === link.key ? 'currentLink' : ''}`} href={link.href}>
+              {link.label}
+            </a>
+          </font>
+        </td>
+      ))
+    }
+  </tr>
+</table>

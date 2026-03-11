@@ -1,19 +1,24 @@
-# OS generated files #
-######################
+# build output
+dist/
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+# environment variables
+.env
+.env.production
+
+# macOS-specific files
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-/tmp/
-/target/
-/node_modules/
-.*.md.html
-.vagrant
-.npm_install.log
-/bower_components/
-/npm-debug.log
-.project
-/.settings/
+
+# jetbrains setting folder
+.idea/

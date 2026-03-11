@@ -1,0 +1,60 @@
+---
+const { title, current } = Astro.props;
+import NavBar from '../components/NavBar.astro';
+---
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Les Baroqueurs du XVIIIème - {title}</title>
+    <link rel="stylesheet" href="/css/styles.css" type="text/css" />
+    <link rel="shortcut icon" href="/images/favicon.png" />
+    <link rel="apple-touch-icon-precomposed" href="/images/favicon.png" />
+    <meta name="msapplication-TileImage" content="/images/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <slot name="head" />
+  </head>
+  <body id="home">
+    <div align="center" id="mainContainer">
+      <div style="border:1px solid white;">
+        <a href="/" title="Home Page"><img src="/images/logo.gif" width="288" height="127" border="0" /></a>
+      </div>
+      <div>
+        <table width="805" align="center">
+          <tr>
+            <th width="795" scope="row"><img src="/images/barre1.gif" alt="" width="900" height="10" /></th>
+          </tr>
+          <tr>
+            <th scope="row">
+              <NavBar current={current} />
+            </th>
+          </tr>
+          <tr>
+            <th scope="row">&nbsp;</th>
+          </tr>
+          <tr>
+            <th scope="row"><img src="/images/barre2accueil.gif" alt="" width="900" height="50" /></th>
+          </tr>
+          <tr>
+            <th scope="row"><slot name="hero" /></th>
+          </tr>
+        </table>
+      </div>
+
+      <p>&nbsp;</p>
+      <!-- Spacing from original -->
+
+      <slot />
+
+      <p>&nbsp;</p>
+
+      <div id="footer">
+        <div align="center">
+          &copy; 2009-2026 Barroco Piccolo - Création du Site par <a href="http://www.xni-networks.fr" target="_blank">X.N.I Networks</a> - Tous droits
+          réservés
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,62 @@
+backend:
+  name: github
+  repo: felicienfrancois/www.baroqueurs.fr
+  branch: master
+
+media_folder: 'public/images/uploads'
+public_folder: '/images/uploads'
+
+collections:
+  - name: 'concerts'
+    label: 'Concerts'
+    folder: 'src/content/concerts'
+    create: true
+    slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
+    fields:
+      - { label: 'Titre', name: 'title', widget: 'string' }
+      - { label: 'Date', name: 'date', widget: 'datetime' }
+      - { label: 'Lieu', name: 'lieu', widget: 'string', required: false }
+      - { label: 'Programme', name: 'program', widget: 'list', required: false }
+      - { label: 'Description/Notes', name: 'body', widget: 'markdown', required: false }
+
+  - name: 'lieux'
+    label: 'Lieux'
+    folder: 'src/content/lieux'
+    create: true
+    identifier_field: 'nom'
+    fields:
+      - { label: 'Nom', name: 'nom', widget: 'string' }
+      - { label: 'Adresse', name: 'adresse', widget: 'string', required: false }
+      - { label: 'Ville', name: 'ville', widget: 'string', required: false }
+      - { label: 'CP', name: 'cp', widget: 'string', required: false }
+
+  - name: 'morceaux'
+    label: 'Morceaux'
+    folder: 'src/content/morceaux'
+    create: true
+    identifier_field: 'title'
+    fields:
+      - { label: 'Titre', name: 'title', widget: 'string' }
+      - { label: 'Compositeur', name: 'composer', widget: 'string', required: false }
+      - { label: 'Œuvre', name: 'work', widget: 'string', required: false }
+      - { label: 'Catégorie', name: 'category', widget: 'select', options: ['Baroque', 'Renaissance', 'Klezmer', 'Autre'] }
+
+  - name: 'extraits'
+    label: 'Extraits Audio/Vidéo'
+    folder: 'src/content/extraits'
+    create: true
+    fields:
+      - { label: 'Titre', name: 'title', widget: 'string' }
+      - { label: 'Date/Evénement', name: 'date_event', widget: 'string', required: false }
+      - { label: 'Type', name: 'type', widget: 'select', options: ['audio', 'video'] }
+      - { label: 'Fichier Audio', name: 'audio_file', widget: 'file', required: false }
+      - { label: 'Lien Vidéo', name: 'video_link', widget: 'string', required: false }
+      - { label: 'Image', name: 'thumbnail', widget: 'image', required: false }
+
+  - name: 'photos'
+    label: 'Photos'
+    folder: 'src/content/photos'
+    create: true
+    fields:
+      - { label: 'Titre', name: 'title', widget: 'string' }
+      - { label: 'Image', name: 'image', widget: 'image' }

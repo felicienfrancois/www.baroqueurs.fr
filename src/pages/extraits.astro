@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const extraits = await getCollection('extraits');
+
+// Group by date_event
+const groupedExtraits = extraits.reduce(
+  (acc, item) => {
+    const key = item.data.date_event || 'Autres';
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(item);
+    return acc;
+  },
+  {} as Record<string, typeof extraits>,
+);
+
+const sortedGroups = Object.keys(groupedExtraits).sort((a, b) => {
+  // Try to extract year pattern "YYYY" or use string sort
+  const yearA = parseInt(a.match(/\d{4}/)?.[0] || '0');
+  const yearB = parseInt(b.match(/\d{4}/)?.[0] || '0');
+  if (yearA !== yearB) return yearB - yearA;
+  return b.localeCompare(a);
+});
+---
+
+<BaseLayout title="Extraits audios et vidéos" current="extraits">
+  <img slot="hero" src="/images/DSC07939_extraits.jpg" width="900" />
+
+  <table width="757" height="332" border="0" cellpadding="0" cellspacing="0" id="highLight">
+    <tr><td class="celSpacer"></td></tr>
+    <tr>
+      <td valign="top" bgcolor="#FFFFFF" id="news">
+        <p align="center" class="Style14">
+          Arrangements : J. Gerszanowilsz & V. Massuet<br /><br />Ingénieurs du son : R. Dymny & A. Dymny<br />Prise de vues et Réalisation : A.
+          Gaillard & F. Roussignol
+        </p>
+
+        {
+          sortedGroups.map((groupKey) => (
+            <>
+              <p class="Style14">
+                <br />
+                <span class="Style25">{groupKey}</span>
+              </p>
+              <table width="700" border="1" align="center">
+                {groupedExtraits[groupKey].map((item) => (
+                  <tr>
+                    <td>
+                      <div align="center">
+                        {item.data.type === 'video' ? (
+                          <a href={item.data.video_link} target="_blank">
+                            <img src={item.data.thumbnail || '/images/video.png'} alt="extrait" width="28" border="0" />
+                          </a>
+                        ) : (
+                          <a href={item.data.audio_file} target="_blank">
+                            <img src={item.data.thumbnail || '/images/audio.png'} alt="extrait" width="28" border="0" />
+                          </a>
+                        )}
+                      </div>
+                    </td>
+                    <td>
+                      <span class="Style25">
+                        <strong class="Style20">{item.data.title}</strong>
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </table>
+            </>
+          ))
+        }
+      </td>
+    </tr>
+  </table>
+</BaseLayout>

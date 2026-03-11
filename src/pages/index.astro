@@ -1,0 +1,105 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allConcerts = await getCollection('concerts');
+const upcomingConcerts = allConcerts.filter((c) => c.data.date >= new Date()).sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
+
+const concertsWithContent = await Promise.all(
+  upcomingConcerts.map(async (concert) => {
+    const { Content } = await concert.render();
+    return { ...concert, Content };
+  }),
+);
+
+const formatDate = (date: Date) => {
+  return date
+    .toLocaleDateString('fr-FR', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone: 'Europe/Paris',
+    })
+    .replace(':', 'h');
+};
+
+// We need to render the body content.
+---
+
+<BaseLayout title="Accueil" current="home">
+  <img slot="hero" src="/images/DSC07958_accueil.jpg" width="900" />
+
+  <table width="500" border="0" align="center" cellpadding="0" cellspacing="0" id="highLight">
+    <tr><td class="celSpacer"></td></tr>
+    <tr>
+      <td width="500" align="center" valign="middle" bgcolor="#E7E4E7" id="news">
+        <div align="center">
+          <p>&nbsp;</p>
+        </div>
+        <p align="center">
+          <span class="Style41">Découvrez le <a href="https://youtu.be/Jhaj91A4RM4" class="Style18">Clip de présentation</a><br />des Baroqueurs</span
+          >
+        </p>
+        <p align="center">&nbsp;</p>
+        <p align="center">
+          <span class="Style14"><span class="Style16">Prochains concerts :</span></span>
+        </p>
+
+        {
+          concertsWithContent.length > 0 ? (
+            concertsWithContent.map(({ data, Content }) => (
+              <div style="margin-bottom: 20px; text-align: center;">
+                <>
+                  <span class="Style25">{formatDate(data.date)} : </span>
+                  <br />
+                </>
+                <>
+                  <span class="Style14">{data.lieu}</span>
+                  <br />
+                </>
+                <span style="font-size:12px; line-height:25px">
+                  <Content />
+                </span>
+              </div>
+            ))
+          ) : (
+            <p align="center">Pas de concerts prévus pour le moment.</p>
+          )
+        }
+
+        <p align="center">&nbsp;</p>
+        <p align="center">
+          <span class="Style41"
+            >Retrouvez <span class="Style18">les enregistrements </span><br />des Baroqueurs en concert dans la rubrique <br /><a
+              href="/extraits"
+              class="Style18">Extraits audios et vidéos</a
+            >
+          </span>
+        </p>
+        <p align="center">&nbsp;</p>
+        <p align="center">
+          <span class="Style41"
+            >Retrouvez <span class="Style18">les dates et le programme</span>
+            <br />des prochains concerts dans la rubrique <br /><a href="/calendrier" class="Style18">Calendrier des Concerts</a>
+          </span>
+        </p>
+        <p align="center">&nbsp;</p>
+        <p align="center">
+          <span class="Style41"
+            >Retrouvez aussi les Baroqueurs <br />sur leur page <a
+              href="https://www.facebook.com/consort.baroqueurs.5"
+              target="_blank"
+              class="Style18">Facebook</a
+            >
+          </span>
+        </p>
+        <p align="center">&nbsp;</p>
+        <div class="link"></div>
+      </td>
+    </tr>
+    <tr><td class="celSpacer"></td></tr>
+  </table>
+</BaseLayout>
